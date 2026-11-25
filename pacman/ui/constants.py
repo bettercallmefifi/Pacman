@@ -12,8 +12,8 @@ ORANGE = (255, 184, 82)
 DARK_BLUE = (0, 0, 150)
 
 # Window settings
-WINDOW_WIDTH = 900
-WINDOW_HEIGHT = 700
+WINDOW_WIDTH = 1900
+WINDOW_HEIGHT = 1100
 WINDOW_TITLE = "Pac-Man"
 
 # Rendering settings

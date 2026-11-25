@@ -6,8 +6,10 @@ from pacman.ui.constants import (
     WINDOW_TITLE,
     FPS,
     BLACK,
+    CELL_SIZE
 )
 from pacman.ui.input import InputManager
+from pacman.ui.renderer import Renderer
 
 
 class App:
@@ -23,6 +25,9 @@ class App:
         self.running = True
         self.clock = pygame.time.Clock()
         self.input_manager = InputManager()
+        self.renderer = Renderer(self.window.screen)
+        self.player_row = 2
+        self.player_col = 3
 
     def handle_events(self) -> None:
         for event in pygame.event.get():
@@ -34,8 +39,18 @@ class App:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.stop()
-            if direction is not None:
-                print(direction)
+            if direction == "UP":
+                if self.player_row > 0:
+                    self.player_row -= 1
+            elif direction == "DOWN":
+                if self.player_row < WINDOW_HEIGHT // CELL_SIZE - 1:
+                    self.player_row += 1
+            elif direction == "LEFT":
+                if self.player_col > 0:
+                    self.player_col -= 1
+            elif direction == "RIGHT":
+                if self.player_col < WINDOW_WIDTH // CELL_SIZE - 1:
+                    self.player_col += 1
                 
 
     def run(self) -> None:
@@ -48,6 +63,10 @@ class App:
                     break
 
                 self.window.clear(BLACK)
+                self.renderer.draw_player(
+                    self.player_row,
+                    self.player_col
+                )
                 self.window.refresh()
                 self.clock.tick(FPS)
         finally:    
