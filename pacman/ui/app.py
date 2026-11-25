@@ -7,6 +7,7 @@ from pacman.ui.constants import (
     FPS,
     BLACK,
 )
+from pacman.ui.input import InputManager
 
 
 class App:
@@ -21,14 +22,21 @@ class App:
         )
         self.running = True
         self.clock = pygame.time.Clock()
+        self.input_manager = InputManager()
 
     def handle_events(self) -> None:
         for event in pygame.event.get():
+            direction = self.input_manager.get_direction(
+                event
+            )
             if event.type == pygame.QUIT:
                 self.stop()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.stop()
+            if direction is not None:
+                print(direction)
+                
 
     def run(self) -> None:
         """Execute the main application loop."""
