@@ -1,4 +1,12 @@
-from pacman.ui.constants import CELL_SIZE, YELLOW
+from pacman.ui.constants import (
+    CELL_SIZE,
+    YELLOW,
+    BLUE,
+    WHITE,
+    WALL_THICKNESS,
+    PACGUM_RADIUS,
+    SUPER_PACGUM_RADIUS,
+)
 import pygame
 
 
@@ -12,8 +20,7 @@ class Renderer:
     def draw_player(self, row: int, col: int) -> None:
         """Draw Pac-Man at the given maze position."""
 
-        x = col * CELL_SIZE + CELL_SIZE // 2
-        y = row * CELL_SIZE + CELL_SIZE // 2
+        x, y = self.cell_center(row, col)
         radius = CELL_SIZE // 2 - 3
 
         pygame.draw.circle(
@@ -22,3 +29,99 @@ class Renderer:
             (x, y),
             radius
         )
+
+    def draw_wall(
+        self,
+        row: int,
+        col: int,
+        side: str
+    ) -> None:
+        """Draw a wall on the specified side of a cell."""
+        x = col * CELL_SIZE
+        y = row * CELL_SIZE
+
+        if side == "N":
+            pygame.draw.rect(
+                self.screen,
+                BLUE,
+                (
+                    x,
+                    y,
+                    CELL_SIZE,
+                    WALL_THICKNESS
+                )
+            )
+        elif side == "S":
+            pygame.draw.rect(
+                self.screen,
+                BLUE,
+                (
+                    x,
+                    y + CELL_SIZE - WALL_THICKNESS,
+                    CELL_SIZE,
+                    WALL_THICKNESS
+                )
+            )
+        elif side == "E":
+            pygame.draw.rect(
+                self.screen,
+                BLUE,
+                (
+                    x + CELL_SIZE - WALL_THICKNESS,
+                    y,
+                    WALL_THICKNESS,
+                    CELL_SIZE
+                )
+            )
+        elif side == "W":
+            pygame.draw.rect(
+                self.screen,
+                BLUE,
+                (
+                    x,
+                    y,
+                    WALL_THICKNESS,
+                    CELL_SIZE
+                )
+            )
+
+    def draw_maze(
+        self,
+        maze: list[list[list[str]]]
+    ) -> None:
+        """Draw all the walls of the maze."""
+        for row, cells in enumerate(maze):
+            for col, walls in enumerate(cells):
+                for side in walls:
+                    self.draw_wall(row, col, side)
+
+    def cell_center(
+        self,
+        row: int,
+        col: int
+    ) -> tuple[int, int]:
+        """Return the pixel coordinates of a cell center."""
+        x = col * CELL_SIZE + CELL_SIZE // 2
+        y = row * CELL_SIZE + CELL_SIZE // 2
+        return x, y
+
+    def draw_pacgum(self, row: int, col: int) -> None:
+        """Draw a normal pacgum."""
+        x, y = self.cell_center(row, col)
+        pygame.draw.circle(
+            self.screen,
+            WHITE,
+            (x, y),
+            PACGUM_RADIUS
+        )
+
+    def draw_super_pacgum(self, row: int, col: int) -> None:
+        """Draw a super pacgum."""
+        x, y = self.cell_center(row, col)
+        pygame.draw.circle(
+            self.screen,
+            WHITE,
+            (x, y),
+            SUPER_PACGUM_RADIUS
+        )
+

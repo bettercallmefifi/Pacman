@@ -26,8 +26,22 @@ class App:
         self.clock = pygame.time.Clock()
         self.input_manager = InputManager()
         self.renderer = Renderer(self.window.screen)
-        self.player_row = 2
-        self.player_col = 3
+        self.player_row = 0
+        self.player_col = 0
+        self.maze =  [
+            [["N", "S", "W"], ["N", "S"], ["N", "E"]],
+            [["N", "S", "W"], ["N", "S"], ["S", "E"]]
+        ]
+        self.pacgums = [
+            (0, 1),
+            (0, 2),
+            (1, 1)
+        ]
+
+        self.super_pacgums = [
+            (1, 0),
+            (1, 2)
+        ]
 
     def handle_events(self) -> None:
         for event in pygame.event.get():
@@ -63,10 +77,18 @@ class App:
                     break
 
                 self.window.clear(BLACK)
+                self.renderer.draw_maze(self.maze) 
+                for row, col in self.pacgums:
+                    self.renderer.draw_pacgum(row, col)
+
+                for row, col in self.super_pacgums:
+                    self.renderer.draw_super_pacgum(row, col)               
+
                 self.renderer.draw_player(
                     self.player_row,
                     self.player_col
                 )
+
                 self.window.refresh()
                 self.clock.tick(FPS)
         finally:    
