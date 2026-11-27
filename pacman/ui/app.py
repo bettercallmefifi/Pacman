@@ -6,10 +6,15 @@ from pacman.ui.constants import (
     WINDOW_TITLE,
     FPS,
     BLACK,
-    CELL_SIZE
+    CELL_SIZE,
+    RED,
+    PINK,
+    CYAN,
+    ORANGE,
 )
 from pacman.ui.input import InputManager
 from pacman.ui.renderer import Renderer
+# from pacman.mazegenerator import MazeGenerator
 
 
 class App:
@@ -28,6 +33,10 @@ class App:
         self.renderer = Renderer(self.window.screen)
         self.player_row = 0
         self.player_col = 0
+        # self.mazee = MazeGenerator()
+        # self.mazee.generate()
+        # self.mazze = self.mazee.maze
+        # print(self.mazze)
         self.maze =  [
             [["N", "S", "W"], ["N", "S"], ["N", "E"]],
             [["N", "S", "W"], ["N", "S"], ["S", "E"]]
@@ -41,6 +50,13 @@ class App:
         self.super_pacgums = [
             (1, 0),
             (1, 2)
+        ]
+
+        self.ghosts = [
+            (0, 2, RED, False),
+            (1, 0, PINK, False),
+            (1, 1, CYAN, False),
+            (1, 2, ORANGE, True)
         ]
 
     def handle_events(self) -> None:
@@ -84,6 +100,14 @@ class App:
                 for row, col in self.super_pacgums:
                     self.renderer.draw_super_pacgum(row, col)               
 
+                for row, col, color, edible in self.ghosts:
+                    self.renderer.draw_ghost(
+                        row,
+                        col,
+                        color,
+                        edible
+                    )
+
                 self.renderer.draw_player(
                     self.player_row,
                     self.player_col
@@ -91,6 +115,7 @@ class App:
 
                 self.window.refresh()
                 self.clock.tick(FPS)
+
         finally:    
             self.window.close()
 

@@ -6,6 +6,7 @@ from pacman.ui.constants import (
     WALL_THICKNESS,
     PACGUM_RADIUS,
     SUPER_PACGUM_RADIUS,
+    DARK_BLUE,
 )
 import pygame
 
@@ -125,3 +126,72 @@ class Renderer:
             SUPER_PACGUM_RADIUS
         )
 
+    def draw_ghost(
+        self,
+        row: int,
+        col: int,
+        color: tuple[int, int, int],
+        edible: bool
+    ) -> None:
+        """Draw a ghost according to its current state."""
+        x, y = self.cell_center(row, col)
+        radius = CELL_SIZE // 2 - 3
+
+        if edible:
+            body_color = DARK_BLUE
+        else:
+            body_color = color
+
+        pygame.draw.circle(
+            self.screen,
+            body_color,
+            (x, y),
+            radius
+        )
+        pygame.draw.rect(
+            self.screen,
+            body_color,
+            (
+                x - radius,
+                y,
+                radius * 2,
+                radius
+            )
+        )
+        pygame.draw.circle(
+            self.screen,
+            WHITE,
+            (
+                x - 4,
+                y - 3
+            ),
+            3
+        )
+        pygame.draw.circle(
+            self.screen,
+            WHITE,
+            (
+                x + 4,
+                y - 3
+            ),
+            3
+        )
+        pygame.draw.circle(
+            self.screen,
+            BLUE,
+            (
+                x - 4,
+                y - 3
+            ),
+            1
+        )
+        pygame.draw.circle(
+            self.screen,
+            BLUE,
+            (
+                x + 4,
+                y - 3
+            ),
+            1
+        )
+        
